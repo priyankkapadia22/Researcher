@@ -9,7 +9,7 @@ import streamlit as st
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 st.set_page_config(
     page_title="Multi-Agent Research Assistant",
@@ -55,10 +55,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Keys ───────────────────────────────────────────────────────────────────────
-GOOGLE_API_KEY    = os.environ.get("GOOGLE_API_KEY", "")
-TAVILY_API_KEY    = os.environ.get("TAVILY_API_KEY", "")
-LANGCHAIN_API_KEY = os.environ.get("LANGCHAIN_API_KEY", "")
-LANGCHAIN_PROJECT = os.environ.get("LANGCHAIN_PROJECT", "multi-agent-research-assistant")
+# GOOGLE_API_KEY    = os.environ.get("GOOGLE_API_KEY", "")
+# TAVILY_API_KEY    = os.environ.get("TAVILY_API_KEY", "")
+# LANGCHAIN_API_KEY = os.environ.get("LANGCHAIN_API_KEY", "")
+# LANGCHAIN_PROJECT = os.environ.get("LANGCHAIN_PROJECT", "multi-agent-research-assistant")
+
+GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY", "")
+TAVILY_API_KEY = st.secrets.get("TAVILY_API_KEY", "")
+LANGCHAIN_API_KEY = st.secrets.get("LANGCHAIN_API_KEY", "")
+LANGCHAIN_PROJECT = st.secrets.get("LANGCHAIN_PROJECT", "multi-agent-research-assistant")
 
 if LANGCHAIN_API_KEY:
     os.environ["LANGCHAIN_TRACING_V2"] = "true"
