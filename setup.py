@@ -4,6 +4,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_tavily import TavilySearch
 from langsmith import Client
+import streamlit as st
 
 # ── Environment variables ──────────────────────────────────────────────────────
 # Set these in your .env or shell before running:
@@ -18,26 +19,51 @@ from langsmith import Client
 # LangSmith tracing is activated automatically when LANGCHAIN_TRACING_V2=true
 # ──────────────────────────────────────────────────────────────────────────────
 
-# LLM — Gemini 3.1 flash for planner/critic/writer (reasoning-heavy)
+# # LLM — Gemini 3.1 flash for planner/critic/writer (reasoning-heavy)
+# llm = ChatGoogleGenerativeAI(
+#     model="gemini-3.1-flash-lite-preview",
+#     temperature=0,
+#     google_api_key=os.environ["GOOGLE_API_KEY"],
+# )
+
+# # LLM — Gemini 3.1 Flash for researcher nodes (faster, parallel calls)
+# llm_fast = ChatGoogleGenerativeAI(
+#     model="gemini-3.1-flash-lite-preview",
+#     temperature=0,
+#     google_api_key=os.environ["GOOGLE_API_KEY"],
+# )
+
+# # Embeddings — for RAG vector store
+# embeddings = HuggingFaceEmbeddings(
+#     model_name="BAAI/bge-m3",
+#     model_kwargs={
+#         "device": "cuda",  # change to "cuda" if you have a GPU
+#         "token": os.environ["HUGGINGFACEHUB_API_TOKEN"],
+#     },
+#     encode_kwargs={"normalize_embeddings": True},
+# )
+
+
+# LLM — Gemini 3.1 flash for planner/critic/writer
 llm = ChatGoogleGenerativeAI(
     model="gemini-3.1-flash-lite-preview",
     temperature=0,
-    google_api_key=os.environ["GOOGLE_API_KEY"],
+    google_api_key=st.secrets.get("GOOGLE_API_KEY", ""),
 )
 
-# LLM — Gemini 3.1 Flash for researcher nodes (faster, parallel calls)
+# LLM — Gemini 3.1 flash for researcher nodes
 llm_fast = ChatGoogleGenerativeAI(
     model="gemini-3.1-flash-lite-preview",
     temperature=0,
-    google_api_key=os.environ["GOOGLE_API_KEY"],
+    google_api_key=st.secrets.get("GOOGLE_API_KEY", ""),
 )
 
 # Embeddings — for RAG vector store
 embeddings = HuggingFaceEmbeddings(
     model_name="BAAI/bge-m3",
     model_kwargs={
-        "device": "cuda",  # change to "cuda" if you have a GPU
-        "token": os.environ["HUGGINGFACEHUB_API_TOKEN"],
+        "device": "cpu",  # Streamlit Cloud usually does not provide CUDA
+        "token": st.secrets.get("HUGGINGFACEHUB_API_TOKEN", ""),
     },
     encode_kwargs={"normalize_embeddings": True},
 )
