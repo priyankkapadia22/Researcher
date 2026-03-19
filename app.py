@@ -77,7 +77,7 @@ if "active_query"   not in st.session_state: st.session_state.active_query   = "
 if "thread_id"      not in st.session_state:
     st.session_state.thread_id = f"thread-{uuid.uuid4().hex[:8]}"
 
-HISTORY_DB_PATH = Path("research_history.sqlite3")
+HISTORY_DB_PATH = Path(__file__).parent / "research_history.sqlite3"
 
 # ── DB helpers ─────────────────────────────────────────────────────────────────
 
